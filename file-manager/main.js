@@ -17,6 +17,8 @@ import { hash } from './hash/hash-calculation.mjs';
 import { compress } from './compress-and-decompress/compress-file.mjs';
 import { decompress } from './compress-and-decompress/decompress-file.mjs';
 
+import { getSysInfo } from './system-info/system-info.mjs';
+
 //--------------------- init ---------------------//
 if (!process.argv[2] ||
     !process.argv[2].startsWith('--username=')) {
@@ -95,8 +97,12 @@ readline.on('line', async input => {
             await decompress(currentDir, args[0], args[1]);
             break;
 
-        // checking other commands
-
+        // os
+        case 'os':
+            getSysInfo(args[0]);
+            break;
+        
+        // invalid command
         default:
             console.log('Invalid input');
             break;
