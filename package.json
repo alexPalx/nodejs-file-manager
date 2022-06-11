@@ -1,0 +1,19 @@
+{
+  "name": "nodejs-file-manager",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./file-manager/main.js",
+  "scripts": {
+    "start": "node ./file-manager/main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexPalx/nodejs-file-manager.git"
+  },
+  "author": "alexPalx",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alexPalx/nodejs-file-manager/issues"
+  },
+  "homepage": "https://github.com/alexPalx/nodejs-file-manager#readme"
+}
