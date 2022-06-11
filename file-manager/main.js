@@ -7,7 +7,10 @@ import { ls } from './nav-and-working-dir/ls.mjs';
 
 import { cat } from './file-system/read-file.mjs';
 import { add } from './file-system/create-file.mjs';
-import { rn } from './file-system/rename-file.mjs'
+import { rn } from './file-system/rename-file.mjs';
+import { cp } from './file-system/copy-file.mjs';
+import { rm } from './file-system/delete-file.mjs';
+import { mv } from './file-system/move-file.mjs';
 
 //--------------------- init ---------------------//
 if (!process.argv[2] ||
@@ -63,6 +66,16 @@ readline.on('line', async input => {
         case 'rn':
             await rn(currentDir, args[0], args[1]);
             break;
+        case 'cp':
+            await cp(currentDir, args[0], args[1]);
+            break;
+        case 'rm':
+            await rm(currentDir, args[0]);
+            break;
+        case 'mv':
+            await mv(currentDir, args[0], args[1]);
+            break;
+
         // checking other commands
 
         default:
