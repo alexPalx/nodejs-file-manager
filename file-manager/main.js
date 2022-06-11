@@ -12,6 +12,11 @@ import { cp } from './file-system/copy-file.mjs';
 import { rm } from './file-system/delete-file.mjs';
 import { mv } from './file-system/move-file.mjs';
 
+import { hash } from './hash/hash-calculation.mjs';
+
+import { compress } from './compress-and-decompress/compress-file.mjs';
+import { decompress } from './compress-and-decompress/decompress-file.mjs';
+
 //--------------------- init ---------------------//
 if (!process.argv[2] ||
     !process.argv[2].startsWith('--username=')) {
@@ -47,6 +52,7 @@ readline.on('line', async input => {
         case '.test':
             console.log('test');
             break;
+
         // directory
         case 'up':
             currentDir = up(currentDir);
@@ -57,6 +63,7 @@ readline.on('line', async input => {
         case 'ls':
             ls(currentDir);
             break;
+
         // file system
         case 'cat':
             return cat(currentDir, args[0]);
@@ -74,6 +81,18 @@ readline.on('line', async input => {
             break;
         case 'mv':
             await mv(currentDir, args[0], args[1]);
+            break;
+
+        // hash
+        case 'hash':
+            return hash(currentDir, args[0]);
+
+        // compress & decompress
+        case 'compress':
+            await compress(currentDir, args[0], args[1]);
+            break;
+        case 'decompress':
+            await decompress(currentDir, args[0], args[1]);
             break;
 
         // checking other commands
