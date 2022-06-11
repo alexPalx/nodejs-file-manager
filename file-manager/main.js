@@ -4,6 +4,11 @@ import { stdin as input, stdout as output } from 'process';
 import { homedir } from 'os';
 import { cd, up } from './nav-and-working-dir/nav.mjs';
 import { ls } from './nav-and-working-dir/ls.mjs';
+
+import { cat } from './file-system/read-file.mjs';
+import { add } from './file-system/create-file.mjs';
+import { rn } from './file-system/rename-file.mjs'
+
 //--------------------- init ---------------------//
 if (!process.argv[2] ||
     !process.argv[2].startsWith('--username=')) {
@@ -48,6 +53,15 @@ readline.on('line', async input => {
             break;
         case 'ls':
             ls(currentDir);
+            break;
+        // file system
+        case 'cat':
+            return cat(currentDir, args[0]);
+        case 'add':
+            await add(currentDir, args[0]);
+            break;
+        case 'rn':
+            await rn(currentDir, args[0], args[1]);
             break;
         // checking other commands
 
