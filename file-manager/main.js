@@ -35,7 +35,7 @@ if (username.length === 0) {
 
 let currentDir = homedir();
 
-const helloMessage = `Welcome to the File Manager, ${username}!`;
+const helloMessage = `Welcome to the File Manager, ${username}!\nTo exit, enter ".exit" or press the key combination Ctrl + C`;
 const byeMessage = `──────────────────────────────────────────────\nThank you for using File Manager, ${username}!\n─────────────────▄▄───▐█────▄▄▄  .▄▄ · .▄▄ · ─\n─────▄▄▄───▄██▄──█▀───█─▄───▀▄ █·▐█ ▀. ▐█ ▀.──\n───▄██▀█▌─██▄▄──▐█▀▄─▐█▀────▐▀▀▄ ▄▀▀▀█▄▄▀▀▀█▄─\n──▐█▀▀▌───▄▀▌─▌─█─▌──▌─▌────▐█•█▌▐█▄▪▐█▐█▄▪▐█─\n──▌▀▄─▐──▀▄─▐▄─▐▄▐▄─▐▄─▐▄───.▀  ▀ ▀▀▀▀  ▀▀▀▀ ─`;
 
 console.log(helloMessage);
