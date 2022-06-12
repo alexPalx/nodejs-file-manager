@@ -3,31 +3,33 @@ import {
     createWriteStream
 } from 'fs';
 import { access } from 'fs/promises';
-import { resolve, sep } from 'path';
+import { resolve, sep, isAbsolute, basename } from 'path';
 import { createBrotliCompress } from 'zlib';
 
 export const compress = async (currentDir, srcPath, destPath) => {
     if (!srcPath) {
-        console.log(`Operation failed. Use "compress src_file_path dest_file_path"`);
+        console.log(`Operation failed. Use: compress [filename|path_to_file] (optional)[path_to_destination]`);
         return;
     }
 
-    const absoluteSrcPath = resolve(currentDir, srcPath);
+    const absoluteSrcPath = isAbsolute(srcPath) ?
+        srcPath :
+        resolve(currentDir, srcPath);
     let absoluteDestPath;
+
     if (!destPath) {
         absoluteDestPath = absoluteSrcPath + '.br';
     }
-    else absoluteDestPath = resolve(currentDir, destPath) + '.br';
+    else absoluteDestPath = (isAbsolute(destPath) ?
+        destPath :
+        resolve(currentDir, destPath)) + '.br';
 
     try {
         await access(absoluteSrcPath);
     }
     catch {
-        console.log(`Operation failed. The file "${absoluteSrcPath
-            .slice(absoluteSrcPath
-                .includes(sep) ?
-                absoluteSrcPath.lastIndexOf(sep) + 1 :
-                absoluteSrcPath)}" doesn't exist.`);
+        console.log(`Operation failed. The file "${basename(absoluteSrcPath).slice(0, basename(absoluteSrcPath).lastIndexOf('.'))}" doesn't exist.`);
+        return;
     }
 
     const brotliCompress = createBrotliCompress();

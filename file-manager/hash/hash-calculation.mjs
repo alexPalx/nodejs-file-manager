@@ -1,21 +1,27 @@
 import { createReadStream } from 'fs';
 import { access } from 'fs/promises';
 import { createHash } from 'crypto';
-import { resolve } from 'path';
+import { resolve, isAbsolute, basename } from 'path';
 
 export const hash = async (currentDir, fileName) => {
+    const returnMessage = `You are currently in ${currentDir}`;
+
     if (!fileName) {
-        console.log(`Operation failed. Use "hash path_to_file"`);
+        console.log(`Operation failed. Use: hash [filename|path_to_file]`);
+        console.log(returnMessage);
         return;
     }
 
-    const filePath = resolve(currentDir, fileName);
+    const filePath = isAbsolute(fileName) ?
+        fileName :
+        resolve(currentDir, fileName);
 
     try {
         await access(filePath);
     }
     catch {
-        console.log(`Operation failed. The file "${fileName}" doesn't exist.`);
+        console.log(`Operation failed. The file "${basename(fileName)}" doesn't exist.`);
+        console.log(returnMessage);
         return;
     }
 
@@ -28,6 +34,6 @@ export const hash = async (currentDir, fileName) => {
 
     readStream.on('end', () => {
         console.log(fileHash.digest('hex'));
-        console.log(`\nYou are currently in ${currentDir}`);
+        console.log(returnMessage);
     });
 };

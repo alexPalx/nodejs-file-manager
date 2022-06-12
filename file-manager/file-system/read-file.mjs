@@ -1,14 +1,16 @@
 import { createReadStream } from 'fs';
 import { access } from 'fs/promises';
-import { join } from 'path';
+import { resolve, isAbsolute } from 'path';
 
 export const cat = async (currentDir, fileName) => {
     if (!fileName) {
-        console.log(`Operation failed. Use "cat file_name"`);
+        console.log(`Operation failed. Use: cat [filename|path_to_file]`);
         return;
     }
 
-    const filePath = join(currentDir, fileName);
+    const filePath = isAbsolute(fileName) ?
+        fileName :
+        resolve(currentDir, fileName);
 
     try {
         await access(filePath);
@@ -22,6 +24,6 @@ export const cat = async (currentDir, fileName) => {
 
     readStream.pipe(process.stdout);
     readStream.on('end', () => {
-        console.log(`\nYou are currently in ${currentDir}`);
+        console.log(`\nYou are currently in ${currentDir}.`);
     });
 };

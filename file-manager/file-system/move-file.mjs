@@ -1,25 +1,52 @@
-import { access, cp as fsCp, rm } from 'fs/promises';
-import { resolve, sep } from 'path';
+import { access, cp as fsCp, stat, rm} from 'fs/promises';
+import { resolve, isAbsolute, basename } from 'path';
 
 export const mv = async (currentDir, srcPath, destPath) => {
     if (!srcPath || !destPath) {
-        console.log(`Operation failed. Use "mv src_file_path dest_file_path"`);
-        return;
-    }
-    try {
-        await access(destPath);
-    }
-    catch {
-        const srcDir = resolve(currentDir, srcPath);
-        const destDir = resolve(currentDir, destPath);
-        await fsCp(srcDir, destDir)
-            .then(() => rm(srcDir))
-            .catch(() => null);
+        console.log(`Operation failed. Use: mv [filename|path_to_file] [path_to_new_directory]`);
         return;
     }
 
-    const fileName = destPath.slice(destPath.includes(sep) ?
-        destPath.lastIndexOf(sep) + 1 :
-        destPath);
+    const fileName = basename(srcPath);
+
+    try {
+        await access(resolve(currentDir, srcPath));
+    }
+    catch {
+        console.log(`Operation failed. The file "${fileName}" doesn't exist.`);
+        return;
+    }
+
+    try {
+        await access(resolve(destPath, fileName));
+    }
+    catch {
+        const resolvedSrcPath = isAbsolute(srcPath) ?
+            srcPath :
+            resolve(currentDir, srcPath);
+        const resolvedDestPath = isAbsolute(destPath) ?
+            destPath :
+            resolve(currentDir, destPath);
+
+        const isDestPathDirectory = await stat(resolvedDestPath)
+            .then(stats => stats.isDirectory())
+            .catch(err => {
+                console.log(`Operation failed: ${err}`);
+            });
+        if (!isDestPathDirectory) {
+            if (isDestPathDirectory === false) {
+                console.log('Operation failed. The second argument must be a directory.')
+            }
+            return;
+        }
+
+        await fsCp(resolvedSrcPath, resolve(resolvedDestPath, fileName))
+            .then(() => rm(resolvedSrcPath))
+            .catch(err => {
+                console.log(`Operation failed: ${err}`);
+            });
+        return;
+    }
+
     console.log(`Operation failed. The file "${fileName}" already exists.`);
 };

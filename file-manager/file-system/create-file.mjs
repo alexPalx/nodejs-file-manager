@@ -1,13 +1,15 @@
 import { access, writeFile } from 'fs/promises';
-import { join } from 'path';
+import { resolve, isAbsolute } from 'path';
 
 export const add = async (currentDir, fileName) => {
     if (!fileName) {
-        console.log(`Operation failed. Use "add file_name"`);
+        console.log(`Operation failed. Use: add [filename|path_to_file]`);
         return;
     }
 
-    const filePath = join(currentDir, fileName);
+    const filePath = isAbsolute(fileName) ?
+        fileName :
+        resolve(currentDir, fileName);
 
     try {
         await access(filePath);

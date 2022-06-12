@@ -7,7 +7,7 @@ import {
 } from 'os';
 
 export const getSysInfo = (arg) => {
-    const operationFailedMessage = 'Operation failed. Use "os [--EOL|--cpus|--homedir|--username|--architecture]"';
+    const operationFailedMessage = 'Operation failed. Use "os [--EOL|--cpus|--homedir|--username|--architecture]".';
     if (!arg) {
         return console.log(operationFailedMessage);
     }

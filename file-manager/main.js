@@ -18,6 +18,7 @@ import { compress } from './compress-and-decompress/compress-file.mjs';
 import { decompress } from './compress-and-decompress/decompress-file.mjs';
 
 import { getSysInfo } from './system-info/system-info.mjs';
+import { getHelp } from './system-info/help.mjs';
 
 //--------------------- init ---------------------//
 if (!process.argv[2] ||
@@ -35,7 +36,7 @@ if (username.length === 0) {
 let currentDir = homedir();
 
 const helloMessage = `Welcome to the File Manager, ${username}!`;
-const byeMessage = `Thank you for using File Manager, ${username}!`;
+const byeMessage = `──────────────────────────────────────────────\nThank you for using File Manager, ${username}!\n─────────────────▄▄───▐█────▄▄▄  .▄▄ · .▄▄ · ─\n─────▄▄▄───▄██▄──█▀───█─▄───▀▄ █·▐█ ▀. ▐█ ▀.──\n───▄██▀█▌─██▄▄──▐█▀▄─▐█▀────▐▀▀▄ ▄▀▀▀█▄▄▀▀▀█▄─\n──▐█▀▀▌───▄▀▌─▌─█─▌──▌─▌────▐█•█▌▐█▄▪▐█▐█▄▪▐█─\n──▌▀▄─▐──▀▄─▐▄─▐▄▐▄─▐▄─▐▄───.▀  ▀ ▀▀▀▀  ▀▀▀▀ ─`;
 
 console.log(helloMessage);
 console.log(`You are currently in ${currentDir}`);
@@ -52,7 +53,7 @@ readline.on('line', async input => {
         case '.exit':
             process.exit();
         case '.test':
-            console.log('test');
+            console.log('\nTest not found.                                                          \n                                     ▓█████████████████▄  ▄▄             \n                                 ▄██████████████████████████████▄        \n                                ▓█████████████████████████████████       \n    ██  ██  █▄  ▄▄  ██  ██      █████ ▀███████████████████████████▌      \n   ▓██  ██  ██  ██ ▓██  ██      ████▌───   ▀▐▀▀▀▀█████████████████▌      \n    ██▀▀██  ██  ██  ██▀▀██       ██▌ ▀▓▓▀      ▀▓▀▓████ █▐████████       \n    ▓█  ██  ▓█  ██  ▓█  ██       ▀█▌                ███  ████████▀       \n    ▓█  ██▓  ████   ▓█  ██▓ ▄      ▀██▄      ──    ╓▓██▌  ███████▀       \n                                  ▐█████▌╖╖╖      ▓█▌   ██████▌          \n                                  ▐█████ ╢╝     ┴ ▓     ╟█████▌          \n                                  ▓▀█▓▄█▌ ▄▄    ╓▄████▄▄  ▀███▌          \n                                ▄████████▓▓▓▓▄██████████████▄ ▀▀         \n                               ███████████████████████████████▌          \n');
             break;
 
         // directory
@@ -102,6 +103,11 @@ readline.on('line', async input => {
             getSysInfo(args[0]);
             break;
         
+        //help
+        case 'help':
+            getHelp(args[0]);
+            break;
+
         // invalid command
         default:
             console.log('Invalid input');
