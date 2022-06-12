@@ -1,3 +1,4 @@
+import { createReadStream, createWriteStream } from 'fs';
 import { access, cp as fsCp, stat } from 'fs/promises';
 import { resolve, isAbsolute, basename } from 'path';
 
@@ -33,6 +34,7 @@ export const cp = async (currentDir, srcPath, destPath) => {
             .catch(err => {
                 console.log(`Operation failed: ${err}`);
             });
+        
         if (!isDestPathDirectory) {
             if (isDestPathDirectory === false) {
                 console.log('Operation failed. The second argument must be a directory.')
@@ -40,10 +42,15 @@ export const cp = async (currentDir, srcPath, destPath) => {
             return;
         }
 
-        await fsCp(resolvedSrcPath, resolve(resolvedDestPath, fileName))
-            .catch(err => {
-                console.log(`Operation failed: ${err}`);
-            });
+        try {
+            const readStream = createReadStream(resolvedSrcPath);
+            const writeStream = createWriteStream(resolve(resolvedDestPath, fileName));
+
+            readStream.pipe(writeStream);
+        }
+        catch (err) {
+            console.log(`Operation failed: ${err}`);
+        }
         return;
     }
 

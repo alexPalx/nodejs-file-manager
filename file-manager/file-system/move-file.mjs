@@ -1,4 +1,5 @@
-import { access, cp as fsCp, stat, rm} from 'fs/promises';
+import { createReadStream, createWriteStream } from 'fs';
+import { access, cp as fsCp, stat, rm } from 'fs/promises';
 import { resolve, isAbsolute, basename } from 'path';
 
 export const mv = async (currentDir, srcPath, destPath) => {
@@ -33,6 +34,7 @@ export const mv = async (currentDir, srcPath, destPath) => {
             .catch(err => {
                 console.log(`Operation failed: ${err}`);
             });
+
         if (!isDestPathDirectory) {
             if (isDestPathDirectory === false) {
                 console.log('Operation failed. The second argument must be a directory.')
@@ -40,11 +42,19 @@ export const mv = async (currentDir, srcPath, destPath) => {
             return;
         }
 
-        await fsCp(resolvedSrcPath, resolve(resolvedDestPath, fileName))
-            .then(() => rm(resolvedSrcPath))
-            .catch(err => {
-                console.log(`Operation failed: ${err}`);
-            });
+        try {
+            const readStream = createReadStream(resolvedSrcPath);
+            const writeStream = createWriteStream(resolve(resolvedDestPath, fileName));
+
+            readStream.pipe(writeStream);
+            writeStream.on('close', () =>
+                rm(resolvedSrcPath)
+                    .catch(() =>
+                        console.log(`Error: failed to delete file ${fileName}`)));
+        }
+        catch (err) {
+            console.log(`Operation failed: ${err}`);
+        }
         return;
     }
 
